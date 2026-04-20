@@ -1,0 +1,12 @@
+name: "SentinelEngine Bot"
+description: "Cloud Cost PR Analyzer"
+url: "https://github.com/SentinelEngine/bot"
+public: false
+default_events:
+  - pull_request
+default_permissions:
+  pull_requests: write
+  issues: write
+  contents: read
+hook_attributes:
+  url: "https://smee.io/jjVyp7DAwS2wRknu"
