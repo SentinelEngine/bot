@@ -12,7 +12,7 @@ export default (app) => {
 
     // Create a loading comment
     const prComment = context.issue({
-      body: "⏳ **SentinelEngine is analyzing your PR for Cloud Cost Impact...**",
+      body: "⏳ **CloudGauge is analyzing your PR for Cloud Cost Impact...**",
     });
     const comment = await context.octokit.issues.createComment(prComment);
 
@@ -69,7 +69,25 @@ export default (app) => {
         body: result.markdown
       });
 
-      app.log.info(`Successfully posted cost impact for PR #${prNumber}`);
+      // 🔥 HACKATHON FLEX: GitHub Check Run (CI Blocker)
+      // If the code increases cost by more than $50/mo (5000 cents), mark the PR check as FAILED.
+      // This physically blocks the developer from merging!
+      const isOverBudget = result.totalDeltaCents > 5000;
+      
+      await context.octokit.checks.create({
+        owner,
+        repo,
+        name: "CloudGauge Budget Policy",
+        head_sha: headSha,
+        status: "completed",
+        conclusion: isOverBudget ? "failure" : "success",
+        output: {
+          title: isOverBudget ? "Budget Exceeded!" : "Cost Approved",
+          summary: `This Pull Request introduces a cost delta of $${(Math.abs(result.totalDeltaCents) / 100).toFixed(2)}/mo. ${isOverBudget ? 'This exceeds the $50/mo limit.' : 'This is within budget limits.'}`
+        }
+      });
+
+      app.log.info(`Successfully posted cost impact and CI check for PR #${prNumber}`);
 
     } catch (error) {
       app.log.error(error);
@@ -79,7 +97,7 @@ export default (app) => {
         owner: context.payload.repository.owner.login,
         repo: context.payload.repository.name,
         comment_id: comment.data.id,
-        body: `❌ **SentinelEngine Analysis Failed**\n\n\`\`\`\n${error.message}\n\`\`\``
+        body: `❌ **CloudGauge Analysis Failed**\n\n\`\`\`\n${error.message}\n\`\`\``
       });
     }
   });
