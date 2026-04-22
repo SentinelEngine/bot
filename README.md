@@ -6,6 +6,8 @@ This bot is fully integrated with the core **CloudGauge Backend** which performs
 
 https://github.com/apps/sentinelengine-bot
 
+https://github.com/apps/cloudgauge-bot
+
 ## 🚀 Architecture Overview
 
 1. **GitHub App Trigger**: A developer opens or modifies a Pull Request.
