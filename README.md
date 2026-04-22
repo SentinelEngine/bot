@@ -4,6 +4,8 @@ SentinelEngine PR Bot is a serverless GitHub App that intercepts Pull Request we
 
 This bot is fully integrated with the core **CloudGauge Backend** which performs the heavy-lifting AST logic.
 
+https://github.com/apps/sentinelengine-bot
+
 ## 🚀 Architecture Overview
 
 1. **GitHub App Trigger**: A developer opens or modifies a Pull Request.
